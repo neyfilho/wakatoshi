@@ -1,1 +1,2 @@
 # wakatoshi
+test commit config
