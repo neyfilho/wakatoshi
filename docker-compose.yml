@@ -17,6 +17,8 @@ services:
         - MYSQL_PASSWORD=groot
       ports:
         - "3002:3306"
+      volumes:
+            - ./data/dump.sql:/docker-entrypoint-initdb.d/dump.sql
 
     webserver:
       image: nginx:alpine
