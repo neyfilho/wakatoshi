@@ -1,50 +1,35 @@
 <?php
 
-$servername = "";
-$username = "groot";
-$password = "groot";
-
-try {
-    $conn = new PDO("mysql:host=$servername;dbname=baseone", $username, $password);
-    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-} catch(PDOException $e) {
-    echo $e->getMessage();
-}
-
-// $stmt = $conn->prepare('INSERT INTO tableone (id, name) VALUES(:id, :name)');
-//     $stmt->bindParam(':id', $id);
-//     $stmt->bindParam(':name', $name);
-//     $stmt->execute();
-
-if (isset($_FILES['uploadedfile'])) {
-
-    // get the csv file and open it up
-    $file = $_FILES['uploadedfile']['tmp_name'];
-    $handle = fopen($file, "r");
+function connectDb()
+{
+    $servername = "mysql";
+    $username = "groot";
+    $password = "groot";
+    
     try {
-        // prepare for insertion
-        $query_ip = $db->prepare('');
-
-        // unset the first line like this
-        fgets($handle);
-
-        // created loop here
-        while (($data = fgetcsv($handle, 1000, ',')) !== FALSE) {
-            $query_ip->execute($data);
-        }
-
-        fclose($handle);
-
+        $conn = new PDO("mysql:host=$servername;dbname=baseone", $username, $password);
+        $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     } catch(PDOException $e) {
-        die($e->getMessage());
+        echo $e->getMessage();
     }
 
-    echo 'Foi';
-
-} else {
-    echo 'Não foi';
+    return $conn;
 }
+    
+$conn = connectDb();
 
+if (isset($_POST["submit_file"])) {
+    $file = $_FILES["file"]["tmp_name"];
+    $file_open = fopen($file,"r");
+    while (($csv = fgetcsv($file_open, 1000, ",")) !== false) {
+        $id = $csv[0];
+        $name = $csv[1];
+        $stmt = $conn->prepare("INSERT INTO tableone (id, name) VALUES (:id, :name)");
+        $stmt->bindParam(':id', $id);
+        $stmt->bindParam(':name', $name);
+        $stmt->execute();
+    }
+}
 ?>
 
 <html>
@@ -54,13 +39,9 @@ if (isset($_FILES['uploadedfile'])) {
     </head>
     <body>
         <div class="container">
-            <form enctype="multipart/form-data" method="POST" action="index.php">
-                <div class="form-group">
-                    <input name="userfile" type="file">
-                </div>
-                <div class="col-auto">
-                    <button type="submit" class="btn btn-primary mb-2">Submit</button>
-                </div>
+            <form method="post" action="index.php" enctype="multipart/form-data">
+                <input type="file" name="file"/>
+                <input type="submit" name="submit_file" value="Submit"/>
             </form>
         </div>
         <div class="container">
