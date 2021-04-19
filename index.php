@@ -77,7 +77,7 @@ if (isset($_POST["submit_file"])) {
                     </thead>
                     <tbody>
                         <?php
-                        $data = $conn->query("SELECT * FROM tableone limit 10")->fetchAll();
+                        $data = $conn->query("SELECT * FROM tableone limit 5")->fetchAll();
                         foreach ($data as $row) {
                             echo "<tr>";
                             echo "<th scope='row'>" . $row['id']. "</th>";
@@ -102,7 +102,7 @@ if (isset($_POST["submit_file"])) {
                     </thead>
                     <tbody>
                         <?php
-                        $data = $conn->query("SELECT * FROM tabletwo limit 10")->fetchAll();
+                        $data = $conn->query("SELECT * FROM tabletwo limit 5")->fetchAll();
                         foreach ($data as $row) {
                             echo "<tr>";
                             echo "<th scope='row'>" . $row['id']. "</th>";
@@ -114,6 +114,32 @@ if (isset($_POST["submit_file"])) {
             </div>
             <div class="row">
                 <p>Foram encontrados <?php echo $conn->query("SELECT * FROM tabletwo")->rowCount();?>
+                 registros.</p>
+            </div>
+            <div class="row">
+                <h3>Diff de Tabelas</h3>
+                <table class="table table-bordered" style="text-align: center">
+                    <thead>
+                        <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">NAME</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                        $data = $conn->query("SELECT * FROM tabletwo limit 5")->fetchAll();
+                        foreach ($data as $row) {
+                            echo "<tr>";
+                            echo "<th scope='row'>" . $row['id']. "</th>";
+                            echo "<td>" . $row['name']. "</td>";
+                            echo "<tr>";
+                        }?>
+                    </tbody>
+                </table>
+            </div>
+            <div class="row">
+                <p>Foram encontrados 
+                <?php echo $conn->query("SELECT * FROM tabletwo as t INNER JOIN tableone AS o ON t.id = o.id ")->rowCount();?>
                  registros.</p>
             </div>
         </div>
