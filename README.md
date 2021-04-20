@@ -1,3 +1,3 @@
 # wakatoshi
 
-## don't be pretty or complicated, just make my procv easier
+## não é pra ser bonito, muito menos complicado, apenas torne meu procv mais fácil
