@@ -80,24 +80,7 @@ if (isset($_POST["Import"])) {
         <div class="container">
             <div class="row">
                 <h3>Tabela 1</h3>
-                <table class="table table-bordered" style="text-align: center">
-                    <thead>
-                        <tr>
-                        <th scope="col">ID</th>
-                        <th scope="col">NAME</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php
-                        $data = getAll("tableone");
-                        foreach ($data as $row) {
-                            echo "<tr>";
-                            echo "<th scope='row'>" . $row['id']. "</th>";
-                            echo "<td>" . $row['name']. "</td>";
-                            echo "<tr>";
-                        }?>
-                    </tbody>
-                </table>
+                <?php getAll("tableone"); ?>
             </div>
             <div class="row">
                 <p>Foram encontrados <?php echo countAll("tableone");?>
@@ -105,24 +88,7 @@ if (isset($_POST["Import"])) {
             </div>
             <div class="row">
                 <h3>Tabela 2</h3>
-                <table class="table table-bordered" style="text-align: center">
-                    <thead>
-                        <tr>
-                        <th scope="col">ID</th>
-                        <th scope="col">NAME</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php
-                        $data = getAll("tabletwo");
-                        foreach ($data as $row) {
-                            echo "<tr>";
-                            echo "<th scope='row'>" . $row['id']. "</th>";
-                            echo "<td>" . $row['name']. "</td>";
-                            echo "<tr>";
-                        }?>
-                    </tbody>
-                </table>
+                <?php getAll("tabletwo"); ?>
             </div>
             <div class="row">
                 <p>Foram encontrados <?php echo countAll("tabletwo");?>
@@ -130,28 +96,10 @@ if (isset($_POST["Import"])) {
             </div>
             <div class="row">
                 <h3>Diff de Tabelas</h3>
-                <table class="table table-bordered" style="text-align: center">
-                    <thead>
-                        <tr>
-                        <th scope="col">ID</th>
-                        <th scope="col">NAME</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php
-                        $data = connectDb()->query("SELECT * FROM tabletwo limit 5")->fetchAll();
-                        foreach ($data as $row) {
-                            echo "<tr>";
-                            echo "<th scope='row'>" . $row['id']. "</th>";
-                            echo "<td>" . $row['name']. "</td>";
-                            echo "<tr>";
-                        }?>
-                    </tbody>
-                </table>
+                <?php getAll("tabletwo"); ?>
             </div>
             <div class="row">
-                <p>Foram encontrados 
-                <?php echo connectDb()->query("SELECT * FROM tabletwo as t INNER JOIN tableone AS o ON t.id = o.id ")->rowCount();?>
+                <p>Foram encontrados <?php echo countAll("tabletwo");?>
                  registros.</p>
             </div>
         </div>
