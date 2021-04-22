@@ -4,44 +4,19 @@ error_reporting(E_ALL);
 ini_set("display_errors", 1);
 set_time_limit(300);
 
-function connectDb()
-{
-    $servername = "mysql";
-    $username = "groot";
-    $password = "groot";
+include_once "connect.php";
+include_once "importcsv.php";
+include_once "list.php";
     
-    try {
-        $conn = new PDO("mysql:host=$servername;dbname=baseone", $username, $password);
-        $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    } catch(PDOException $e) {
-        echo $e->getMessage();
-    }
-
-    return $conn;
-}
-    
-$conn = connectDb();
-
 if (isset($_POST["submit_file"])) {
-    
 
     $file = $_FILES["file"]["tmp_name"];
     $tablename = $_POST["tablename"];
     $delimiter = $_POST["delimitador"];
-    $file_open = fopen($file,"r");
 
-    $stmt = $conn->prepare("TRUNCATE TABLE $tablename;");
-    $stmt->execute();
-
-    while (($csv = fgetcsv($file_open, 1000, $delimiter)) !== false) {
-        $id = $csv[0];
-        $name = $csv[1];
-        $stmt = $conn->prepare("INSERT INTO $tablename (id, name) VALUES (:id, :name)");
-        $stmt->bindParam(':id', $id);
-        $stmt->bindParam(':name', $name);
-        $stmt->execute();
-    }
+    importCsv($file, $tablename, $delimiter);
 }
+
 ?>
 
 <html>
@@ -89,7 +64,7 @@ if (isset($_POST["submit_file"])) {
                     </thead>
                     <tbody>
                         <?php
-                        $data = $conn->query("SELECT * FROM tableone limit 5")->fetchAll();
+                        $data = getAll("tableone");
                         foreach ($data as $row) {
                             echo "<tr>";
                             echo "<th scope='row'>" . $row['id']. "</th>";
@@ -100,7 +75,7 @@ if (isset($_POST["submit_file"])) {
                 </table>
             </div>
             <div class="row">
-                <p>Foram encontrados <?php echo $conn->query("SELECT * FROM tableone")->rowCount();?>
+                <p>Foram encontrados <?php echo countAll("tableone");?>
                  registros.</p>
             </div>
             <div class="row">
@@ -114,7 +89,7 @@ if (isset($_POST["submit_file"])) {
                     </thead>
                     <tbody>
                         <?php
-                        $data = $conn->query("SELECT * FROM tabletwo limit 5")->fetchAll();
+                        $data = getAll("tabletwo");
                         foreach ($data as $row) {
                             echo "<tr>";
                             echo "<th scope='row'>" . $row['id']. "</th>";
@@ -125,7 +100,7 @@ if (isset($_POST["submit_file"])) {
                 </table>
             </div>
             <div class="row">
-                <p>Foram encontrados <?php echo $conn->query("SELECT * FROM tabletwo")->rowCount();?>
+                <p>Foram encontrados <?php echo countAll("tabletwo");?>
                  registros.</p>
             </div>
             <div class="row">
@@ -139,7 +114,7 @@ if (isset($_POST["submit_file"])) {
                     </thead>
                     <tbody>
                         <?php
-                        $data = $conn->query("SELECT * FROM tabletwo limit 5")->fetchAll();
+                        $data = connectDb()->query("SELECT * FROM tabletwo limit 5")->fetchAll();
                         foreach ($data as $row) {
                             echo "<tr>";
                             echo "<th scope='row'>" . $row['id']. "</th>";
@@ -151,7 +126,7 @@ if (isset($_POST["submit_file"])) {
             </div>
             <div class="row">
                 <p>Foram encontrados 
-                <?php echo $conn->query("SELECT * FROM tabletwo as t INNER JOIN tableone AS o ON t.id = o.id ")->rowCount();?>
+                <?php echo connectDb()->query("SELECT * FROM tabletwo as t INNER JOIN tableone AS o ON t.id = o.id ")->rowCount();?>
                  registros.</p>
             </div>
         </div>
