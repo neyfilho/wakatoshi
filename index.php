@@ -1,5 +1,9 @@
 <?php
 
+error_reporting(E_ALL);
+ini_set("display_errors", 1);
+set_time_limit(300);
+
 function connectDb()
 {
     $servername = "mysql";
@@ -23,12 +27,13 @@ if (isset($_POST["submit_file"])) {
 
     $file = $_FILES["file"]["tmp_name"];
     $tablename = $_POST["tablename"];
+    $delimiter = $_POST["delimitador"];
     $file_open = fopen($file,"r");
 
     $stmt = $conn->prepare("TRUNCATE TABLE $tablename;");
     $stmt->execute();
 
-    while (($csv = fgetcsv($file_open, 1000, ",")) !== false) {
+    while (($csv = fgetcsv($file_open, 1000, $delimiter)) !== false) {
         $id = $csv[0];
         $name = $csv[1];
         $stmt = $conn->prepare("INSERT INTO $tablename (id, name) VALUES (:id, :name)");
@@ -53,6 +58,13 @@ if (isset($_POST["submit_file"])) {
                         <select name="tablename"  class="form-control" id="exampleFormControlSelect1">
                             <option value="tableone">tableone</option>
                             <option value="tabletwo">tabletwo</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleFormControlSelect1">Selecione o delimitador:</label>
+                        <select name="delimitador"  class="form-control" id="exampleFormControlSelect1">
+                            <option value="<?php echo "," ?>"">Virgula</option>
+                            <option value="<?php echo "\t" ?>">Tab</option>
                         </select>
                     </div>
                     <div class="form-group">
