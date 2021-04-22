@@ -15,8 +15,22 @@ function importCsv($file, $tablename, $delimiter)
         $stmt = connectDb()->prepare("INSERT INTO $tablename (id, name) VALUES (:id, :name)");
         $stmt->bindParam(':id', $id);
         $stmt->bindParam(':name', $name);
-        $stmt->execute();
+        $result = $stmt->execute();
+        
+        if(!$result ){
+            echo "<script type=\"text/javascript\">
+                    alert(\"Arquivo invalido: Envie um arquivo csv valido.\");
+                    window.location = \"index.php\"
+                </script>";		
+        }
     }
+
+    fclose($file);
+    echo "<script type=\"text/javascript\">
+            alert(\"Arquivo csv importdo com sucesso.\");
+            window.location = \"/\"
+        </script>";	
+    
 }
 
 ?>
