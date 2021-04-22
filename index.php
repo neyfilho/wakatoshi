@@ -8,7 +8,7 @@ include_once "connect.php";
 include_once "importcsv.php";
 include_once "list.php";
     
-if (isset($_POST["submit_file"])) {
+if (isset($_POST["Import"])) {
 
     $file = $_FILES["file"]["tmp_name"];
     $tablename = $_POST["tablename"];
@@ -21,34 +21,59 @@ if (isset($_POST["submit_file"])) {
 
 <html>
     <head>
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" crossorigin="anonymous">
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" crossorigin="anonymous"></script>
         <title>Index</title>
     </head>
     <body>
         <div class="container pt-3">
             <div class="row">
-                <form method="post" action="index.php" enctype="multipart/form-data">
-                    <div class="form-group">
-                        <label for="exampleFormControlSelect1">Selecione a base de dados:</label>
-                        <select name="tablename"  class="form-control" id="exampleFormControlSelect1">
-                            <option value="tableone">tableone</option>
-                            <option value="tabletwo">tabletwo</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="exampleFormControlSelect1">Selecione o delimitador:</label>
-                        <select name="delimitador"  class="form-control" id="exampleFormControlSelect1">
-                            <option value="<?php echo "," ?>"">Virgula</option>
-                            <option value="<?php echo "\t" ?>">Tab</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="exampleFormControlFile1">Envie seu csv:</label>
-                        <input type="file" name="file"/>
-                    </div>
-                    <div class="form-group">
-                        <input type="submit" name="submit_file" value="Submit"/>
-                    </div>
+                <form class="form-horizontal" method="post" action="index.php" enctype="multipart/form-data">
+                    <fieldset>
+                        
+                        <!-- Form Name -->
+                        <legend>Importação e Exportação de CSV</legend>
+                        
+                        <!-- Select Tables Box -->
+                        <div class="form-group">
+                            <label class="col-md-4 control-label" for="exampleFormControlSelect1">Selecione a base de dados:</label>
+                            <div class="col-md-4">
+                                <select name="tablename"  class="form-control" id="exampleFormControlSelect1">
+                                    <option value="tableone">tableone</option>
+                                    <option value="tabletwo">tabletwo</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Select Delimiter Box -->
+                        <div class="form-group">
+                            <label class="col-md-4 control-label" for="exampleFormControlSelect1">Selecione o delimitador:</label>
+                            <div class="col-md-4">
+                                <select name="delimitador"  class="form-control" id="exampleFormControlSelect1">
+                                    <option value="<?php echo "," ?>"">Virgula</option>
+                                    <option value="<?php echo "\t" ?>">Tab</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- File Button -->
+                        <div class="form-group">
+                            <label class="col-md-4 control-label" for="exampleFormControlFile1">Envie seu csv:</label>
+                            <div class="col-md-4">
+                                <input type="file" name="file"/>
+                            </div>
+                        </div>
+                        
+                        <!-- Button -->
+                        <div class="form-group">
+                            <label class="col-md-4 control-label" for="singlebutton">Import data</label>
+                            <div class="col-md-4">
+                                <button type="submit" id="submit" name="Import" class="btn btn-primary button-loading" data-loading-text="Loading...">Upload</button>
+                            </div>
+                        </div>
+
+                    </fieldset>
                 </form>
             </div>
         </div>
