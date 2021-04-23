@@ -6,7 +6,7 @@ ini_set('MAX_EXECUTION_TIME', '-1');
 set_time_limit(30000000);
 
 include_once "connect.php";
-include_once "importcsv.php";
+include_once "csv.php";
 include_once "list.php";
     
 if (isset($_POST["Import"])) {
