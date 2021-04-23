@@ -27,6 +27,11 @@ if (isset($_POST["Update"])) {
     updateField($tablename, $fieldTable, $fieldUpdate);
 }
 
+if (isset($_POST["Export"])) {
+
+    exportCsv($file, $tablename, $delimiter);
+}
+
 ?>
 
 <html>

@@ -33,4 +33,24 @@ function importCsv($file, $tablename, $delimiter)
     
 }
 
+function exportCsv()
+{
+
+    header('Content-Type: text/csv; charset=utf-8');  
+    header('Content-Disposition: attachment; filename=data.csv');  
+    
+    $output = fopen("php://output", "w");  
+    
+    fputcsv($output, array('Id', 'Name'));  
+    
+    $data = connectDb()->query("SELECT * FROM tabletwo INNER JOIN tableone ON tabletwo.id = tableone.id  WHERE tableone.name <> tabletwo.name");  
+    
+    while($row = $data->fetch(PDO::FETCH_ASSOC))  
+    {  
+        fputcsv($output, $row);  
+    }  
+    
+    fclose($output);  
+}
+
 ?>
