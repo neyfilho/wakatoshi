@@ -32,7 +32,7 @@ function getAll($tableName)
                     <div class='form-group'>
                         <div style='text-align: center;'>
                             <input type='hidden' name='tableName' value='$tableName'/>
-                            <input type='submit' name='Clear' class='btn btn-danger' value='Clean Table?'/>
+                            <input type='submit' name='Clean' class='btn btn-danger' value='Clean Table?'/>
                         </div>
                     </div>                    
                 </form>           
@@ -117,6 +117,11 @@ function cleanTable($tableName)
 {
     $stmt = connectDb()->prepare("TRUNCATE TABLE $tableName;");
     $stmt->execute();
+
+    echo "<script type=\"text/javascript\">
+            alert(\"Tabela foi limpa com sucesso.\");
+            window.location = \"/\"
+        </script>";
 }
 
 ?>
