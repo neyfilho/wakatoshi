@@ -24,7 +24,17 @@ function getAll($tablename)
                 echo "<td>" . $row['name']. "</td>";
                 echo "<tr>";
             }
-        echo "</tbody></table><p style='text-align: center;'>Registros encontrados: ".countAll($tablename)."</p></div>";
+        echo "</tbody></table><p style='text-align: center;'>Registros encontrados: ".countAll($tablename)."</p>";
+        echo "<div>
+                <form class='form-horizontal' action='index.php' method='post' name='clearTable' enctype='multipart/form-data'>
+                    <div class='form-group'>
+                        <div style='text-align: center;'>
+                            <input type='hidden' name='tableName' value='$tablename'/>
+                            <input type='submit' name='Clear' class='btn btn-danger' value='Clean Table?'/>
+                        </div>
+                    </div>                    
+                </form>           
+            </div></div>";
         
    } else {
         echo "Você ainda não possui registros na tabela.";
@@ -55,7 +65,7 @@ function getAllDiff()
             }
         echo "</tbody></table><p style='text-align: center;'>Registros diferentes encontrados: ".countDiff()."</p>";
         echo "<div>
-                <form class='form-horizontal' action='index.php' method='post' name='upload_excel' enctype='multipart/form-data'>
+                <form class='form-horizontal' action='index.php' method='post' enctype='multipart/form-data'>
                     <div class='form-group'>
                         <div style='text-align: center;'>
                             <input type='submit' name='Export' class='btn btn-success' value='export to excel'/>
@@ -95,6 +105,12 @@ function countDiff()
 {
     $data = connectDb()->query("SELECT * FROM tabletwo INNER JOIN tableone ON tabletwo.id = tableone.id  WHERE tableone.name <> tabletwo.name")->rowCount();
     return $data;
+}
+
+function cleanTable($tablename)
+{
+    $stmt = connectDb()->prepare("TRUNCATE TABLE $tablename;");
+    $stmt->execute();
 }
 
 ?>

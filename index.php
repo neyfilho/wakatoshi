@@ -10,27 +10,33 @@ include_once "csv.php";
 include_once "list.php";
     
 if (isset($_POST["Import"])) {
-
     $file = $_FILES["file"]["tmp_name"];
-    $tablename = $_POST["tablename"];
+    $tableName = $_POST["tableName"];
     $delimiter = $_POST["delimitador"];
 
-    importCsv($file, $tablename, $delimiter);
-}
-
-if (isset($_POST["Update"])) {
-
-    $tablename = $_POST["tablename"];
-    $fieldTable = $_POST["fieldTable"];
-    $fieldUpdate = $_POST["fieldUpdate"];
-
-    updateField($tablename, $fieldTable, $fieldUpdate);
+    importCsv($file, $tableName, $delimiter);
 }
 
 if (isset($_POST["Export"])) {
-
-    exportCsv($file, $tablename, $delimiter);
+    exportCsv();
 }
+
+if (isset($_POST["Update"])) {
+    $tableName = $_POST["tableName"];
+    $fieldTable = $_POST["fieldTable"];
+    $fieldUpdate = $_POST["fieldUpdate"];
+
+    updateField($tableName, $fieldTable, $fieldUpdate);
+}
+
+if (isset($_POST["Clean"])) {
+    $tableName = $_POST["tableName"];
+
+    cleanTable($tableName);
+
+}
+
+
 
 ?>
 
@@ -53,7 +59,7 @@ if (isset($_POST["Export"])) {
                         <div class="form-group">
                             <label class="control-label" for="exampleFormControlSelect1">Selecione a base de dados:</label>
                             <div>
-                                <select name="tablename"  class="form-control" id="exampleFormControlSelect1">
+                                <select name="tableName"  class="form-control" id="exampleFormControlSelect1">
                                     <option value="tableone">Tableone</option>
                                     <option value="tabletwo">Tabletwo</option>
                                 </select>
@@ -112,7 +118,7 @@ if (isset($_POST["Export"])) {
                 <form class="form-horizontal" method="post" action="index.php">
                     <div class="form-group">
                         <label for="exampleInputEmail1">Selecione a tabela a ser atualizada:</label>
-                        <select name="tablename"  class="form-control" id="exampleFormControlSelect1">
+                        <select name="tableName"  class="form-control" id="exampleFormControlSelect1">
                             <option value="tableone">Tableone</option>
                             <option value="tabletwo">Tabletwo</option>
                         </select>
