@@ -1,6 +1,7 @@
 <?php
 
 include_once "connect.php";
+include_once "log.php";
 
 function importCsv($file, $tablename, $delimiter)
 {
@@ -13,8 +14,12 @@ function importCsv($file, $tablename, $delimiter)
         $stmt->bindParam(':id', $id);
         $stmt->bindParam(':name', $name);
         $result = $stmt->execute();
+
+        logMsg("record [".$id."]-[".$name."] was added to base ".$tablename.".", "info");
         
         if(!$result ){
+            logMsg("records was not added to base ".$tablename.".", "error");
+
             echo "<script type=\"text/javascript\">
                     alert(\"Arquivo invalido: Envie um arquivo csv valido.\");
                     window.location = \"index.php\"
@@ -40,7 +45,9 @@ function exportCsv()
     
     fputcsv($output, array('Id', 'Name'));  
     
-    $data = connectDb()->query("SELECT * FROM tabletwo INNER JOIN tableone ON tabletwo.id = tableone.id  WHERE tableone.name <> tabletwo.name");  
+    $data = connectDb()->query("SELECT * FROM tabletwo INNER JOIN tableone ON tabletwo.id = tableone.id  WHERE tableone.name <> tabletwo.name");
+
+    logMsg("data successfully extracted tablediff", "info");
     
     while($row = $data->fetch(PDO::FETCH_ASSOC))  
     {  
