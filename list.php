@@ -2,13 +2,15 @@
 
 include_once "connect.php";
 
-function getAll($tablename)
+function getAll($tableName)
 {
-    $data = connectDb()->query("SELECT * FROM $tablename limit 5")->fetchAll();
+    $data = connectDb()->query("SELECT * FROM $tableName limit 5")->fetchAll();
 
     if ($data != null) {
+        logMsg("data successfully extracted from table: ".$tableName.".", "info");
+
         echo "<div class='table-responsive col-md-4'>
-                <h3 style='text-align: center;'>Tabela: ".$tablename."</h3>
+                <h3 style='text-align: center;'>Tabela: ".$tableName."</h3>
                 <table style='text-align: center;' id='myTable' class='table table-striped table-bordered'>
                     <thead>
                         <tr>
@@ -24,12 +26,12 @@ function getAll($tablename)
                 echo "<td>" . $row['name']. "</td>";
                 echo "<tr>";
             }
-        echo "</tbody></table><p style='text-align: center;'>Registros encontrados: ".countAll($tablename)."</p>";
+        echo "</tbody></table><p style='text-align: center;'>Registros encontrados: ".countAll($tableName)."</p>";
         echo "<div>
                 <form class='form-horizontal' action='index.php' method='post' name='clearTable' enctype='multipart/form-data'>
                     <div class='form-group'>
                         <div style='text-align: center;'>
-                            <input type='hidden' name='tableName' value='$tablename'/>
+                            <input type='hidden' name='tableName' value='$tableName'/>
                             <input type='submit' name='Clear' class='btn btn-danger' value='Clean Table?'/>
                         </div>
                     </div>                    
@@ -37,6 +39,7 @@ function getAll($tablename)
             </div></div>";
         
    } else {
+        logMsg("error get results from table: ".$tableName.".", "error");
         echo "Você ainda não possui registros na tabela.";
    }
 }
@@ -46,6 +49,8 @@ function getAllDiff()
     $data = connectDb()->query("SELECT * FROM tabletwo INNER JOIN tableone ON tabletwo.id = tableone.id  WHERE tableone.name <> tabletwo.name limit 5")->fetchAll();
 
     if ($data != null) {
+        logMsg("data successfully extracted from table: tablediff", "info");
+
         echo "<div class='table-responsive col-md-4'>
                 <h3 style='text-align: center;'>Tabela Diff</h3>
                 <table style='text-align: center;' id='myTable' class='table table-striped table-bordered'>
@@ -73,13 +78,12 @@ function getAllDiff()
                     </div>                    
                 </form>           
             </div></div>";
-        
-   }
+        }
 }
 
-function updateField($tablename, $fieldTable, $fieldUpdate)
+function updateField($tableName, $fieldTable, $fieldUpdate)
 {
-    $stmt = connectDb()->prepare("UPDATE $tablename SET name = '$fieldUpdate' WHERE name = '$fieldTable'");
+    $stmt = connectDb()->prepare("UPDATE $tableName SET name = '$fieldUpdate' WHERE name = '$fieldTable'");
     $result = $stmt->execute();
 
     if(!$result ){
@@ -89,15 +93,17 @@ function updateField($tablename, $fieldTable, $fieldUpdate)
             </script>";		
     }
 
+    logMsg("data: ".$fieldTable. " successfully update to: ".$fieldUpdate." table: ".$tableName, "info");
+
     echo "<script type=\"text/javascript\">
             alert(\"Campo atualizado com sucesso.\");
             window.location = \"/\"
         </script>";
 }
 
-function countAll($tablename)
+function countAll($tableName)
 {
-    $data = connectDb()->query("SELECT * FROM $tablename")->rowCount();
+    $data = connectDb()->query("SELECT * FROM $tableName")->rowCount();
     return $data;
 }
 
@@ -107,9 +113,9 @@ function countDiff()
     return $data;
 }
 
-function cleanTable($tablename)
+function cleanTable($tableName)
 {
-    $stmt = connectDb()->prepare("TRUNCATE TABLE $tablename;");
+    $stmt = connectDb()->prepare("TRUNCATE TABLE $tableName;");
     $stmt->execute();
 }
 
